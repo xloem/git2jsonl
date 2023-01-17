@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+import json, random
+
+if __name__ == '__main__':
+    import sys, argparse
+    parser = argparse.ArgumentParser(
+            prog = 'jsonlctx',
+            description = 'Outputs jsonl from its input with varying context length.',
+        )
+    parser.add_argument('--max', type=int, default=4096)
+    parser.add_argument('--min', type=int, default=1024)
+    parser.add_argument('--input','-i', type=argparse.FileType('r'), default=sys.stdin)
+    parser.add_argument('--output','-o', type=argparse.FileType('w'), default=sys.stdout)
+    args = parser.parse_args()
+
+    assert args.min > 0
+    assert args.max > args.min
+    ID = 101 
+    while True:
+        ctxlen = round(random.random() * (args.max - args.min) + args.min)
+        text = args.input.read(round(random.random() * (args.max - args.min) + args.min))
+        if not len(text):
+            break
+        json.dump(
+                dict(
+                        meta=dict(ID=ID),
+                        text=text,
+                    ),
+                args.output,
+                ensure_ascii=False,
+            )
+        args.output.write('\n')
+        ID += 1
+

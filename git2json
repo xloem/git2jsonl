@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+output() {
+	git "$@" log --all --full-history --reverse --date-order --pretty=raw --patch-with-raw
+}
+
+if [ "$*" == "" ]
+then
+	output
+else
+	for dir in "$@"
+	do
+		output -C "$dir"
+	done
+fi | "$(dirname "$0")"/jsonlctx
