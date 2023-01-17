@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json, random
+import json, random, warnings
 
 if __name__ == '__main__':
     import sys, argparse
@@ -18,7 +18,11 @@ if __name__ == '__main__':
     ID = 101 
     while True:
         ctxlen = round(random.random() * (args.max - args.min) + args.min)
-        text = args.input.read(round(random.random() * (args.max - args.min) + args.min))
+        try:
+            text = args.input.read(round(random.random() * (args.max - args.min) + args.min))
+        except Exception as e:
+            warnings.warn(e)
+            continue
         if not len(text):
             break
         json.dump(
