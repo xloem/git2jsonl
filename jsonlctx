@@ -5,16 +5,16 @@ if __name__ == '__main__':
     import sys, argparse
     parser = argparse.ArgumentParser(
             prog = 'jsonlctx',
-            description = 'Outputs jsonl from its input with varying context length.',
+            description = 'Outputs jsonl from input, varying the character length of the output.',
         )
-    parser.add_argument('--max', type=int, default=4096)
-    parser.add_argument('--min', type=int, default=1024)
-    parser.add_argument('--input','-i', type=argparse.FileType('r'), default=sys.stdin)
-    parser.add_argument('--output','-o', type=argparse.FileType('w'), default=sys.stdout)
+    parser.add_argument('--max', type=int, default=4096*4)
+    parser.add_argument('--min', type=int, default=1024*4)
+    parser.add_argument('--input','-i', type=argparse.FileType('rt'), default=sys.stdin)
+    parser.add_argument('--output','-o', type=argparse.FileType('wt'), default=sys.stdout)
     args = parser.parse_args()
 
     assert args.min > 0
-    assert args.max > args.min
+    assert args.max >= args.min
     ID = 101 
     while True:
         ctxlen = round(random.random() * (args.max - args.min) + args.min)
